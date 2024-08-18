@@ -381,6 +381,7 @@ class IDEM:
             file="",
             ag: AliasGroup = standard
     ):
+        self.using = False
         self.file = file
         self.savedCode = ""
 
@@ -422,6 +423,7 @@ class IDEM:
     async def __call__(self, default=None):
         if default is None:
             default = default_code
+        self.using = True
 
         return await self.session.prompt_async(default=default)
 
@@ -488,7 +490,7 @@ class IDEM:
         self.keybindings.add(Keys.Escape, Keys.Escape, *"FILE", *"OPENFILE", Keys.Enter)(self.openFile)
 
     def SideBar(self, width=0, line=0, is_soft_wrap=0):
-        return self.LineNumberBar(line + 1)
+        return self.LineNumberBar(line + 1) if self.using else []
 
     def RightLineNumberBar(self, line=1):
         return [
@@ -591,6 +593,7 @@ class IDEM:
         ).run_async():
             if not self.checkSave():
                 await self.save(code=self.text)
+            self.using = False
             self.clear()
 
     def clear(self):
