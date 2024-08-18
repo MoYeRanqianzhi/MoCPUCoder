@@ -155,6 +155,9 @@ class Compiler:
                     s += constants[e]
                     self.logger.log(f"[{lineno}][{i}]", f"匹配到常量: {constants[e]}")
 
+                elif not e:
+                    pass
+
                 else:
                     self.logger.log(f"[{lineno}][{i}]", "无匹配的汇编别名")
                     self.logger.log(
